@@ -2,15 +2,17 @@ import Hero from "@/components/Hero";
 import Featured from "@/components/Featured";
 import ShopbyCateg from "@/components/ShopbyCateg";
 import FeaturedCard from "@/components/FeaturedCard";
-import Greet from "@/components/Greet";
 
 async function getProducts() {
-  const res = await fetch("http://localhost:3000/api/products", {
-    method: "GET",
-    next: {
-      revalidate: 60,
-    },
-  });
+  const res = await fetch(
+    `${process.env.APP_URL || "http://localhost:3000"}` + "/api/products",
+    {
+      method: "GET",
+      next: {
+        revalidate: 60,
+      },
+    }
+  );
   const data = await res.json();
 
   return data;

@@ -5,7 +5,7 @@ import { closeDB, connectDB } from "@/utils/db";
 import User from "@/utils/models/Users";
 import { compare } from "bcryptjs";
 
-export const OPTIONS: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       id: "credentials",
@@ -62,6 +62,6 @@ export const OPTIONS: NextAuthOptions = {
   },
 };
 
-const handler = NextAuth(OPTIONS);
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
