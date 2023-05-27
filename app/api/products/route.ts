@@ -35,7 +35,7 @@ export async function GET() {
   try {
     await connectDB();
 
-    const products = await Product.find().exec();
+    const products = await Product.find({});
     return NextResponse.json(products);
   } catch (err: any) {
     console.error(err);
