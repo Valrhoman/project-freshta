@@ -20,7 +20,7 @@ export async function POST(req: Request, res: Response) {
       imageUrl: formData.get("imageUrl"),
     });
     const result = await product.save();
-    return NextResponse.json(result);
+    return NextResponse.json({ result });
   } catch (err: any) {
     console.error(err);
     throw new Error(err);
@@ -36,7 +36,7 @@ export async function GET() {
     await connectDB();
 
     const products = await Product.find({});
-    return NextResponse.json(products);
+    return NextResponse.json({ products });
   } catch (err: any) {
     console.error(err);
     throw new Error(err);
