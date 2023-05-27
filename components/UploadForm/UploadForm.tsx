@@ -178,10 +178,14 @@ export default function UploadForm() {
           Add Product
         </button>
       </form>
-      <p>{session && session.user?.email}</p>
-      <button className="text-2xl p-4" onClick={() => signOut()}>
-        Sign out
-      </button>
+      {session && (
+        <>
+          <p>{session && session.user?.email}</p>
+          <button className="text-2xl p-4" onClick={() => signOut()}>
+            Sign out
+          </button>
+        </>
+      )}
       <Success open={showSuccess} onClose={() => setShowSucess(false)} />
     </>
   );

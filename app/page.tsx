@@ -7,10 +7,7 @@ async function getProducts() {
   const res = await fetch(
     `${process.env.APP_URL || "http://localhost:3000"}` + "/api/products",
     {
-      method: "GET",
-      next: {
-        revalidate: 60,
-      },
+      cache: "no-store",
     }
   );
   const data = await res.json();
@@ -20,6 +17,7 @@ async function getProducts() {
 
 export default async function Home() {
   const products = await getProducts();
+  console.log(products);
   return (
     <main className="flex min-h-screen flex-col">
       <Hero />

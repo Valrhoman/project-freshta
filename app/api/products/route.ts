@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import { closeDB, connectDB } from "@/utils/db";
 import Product from "@/utils/models/Product";
+import mongoose from "mongoose";
 
 export async function POST(req: Request, res: Response) {
   try {
-    await connectDB();
+    if (mongoose.connection.readyState !== 1) {
+      await connectDB();
+    }
 
     const formData = await req.formData();
 
@@ -24,8 +27,6 @@ export async function POST(req: Request, res: Response) {
   } catch (err: any) {
     console.error(err);
     throw new Error(err);
-  } finally {
-    await closeDB();
   }
 
   //
@@ -33,15 +34,15 @@ export async function POST(req: Request, res: Response) {
 
 export async function GET() {
   try {
-    await connectDB();
+    if (mongoose.connection.readyState !== 1) {
+      await connectDB();
+    }
 
-    const products = await Product.find({});
-    return NextResponse.json({ products });
+    const products = await Product.find({}).exec();
+    return NextResponse.json(products);
   } catch (err: any) {
     console.error(err);
     throw new Error(err);
-  } finally {
-    await closeDB();
   }
   //
 }

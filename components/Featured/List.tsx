@@ -2,7 +2,6 @@
 import Image from "next/image";
 import toTitleCase from "@/utils/helpers/toTitleCase";
 import { HiOutlinePlus } from "react-icons/hi";
-import HeroButton from "../Hero/HeroButton";
 
 export default function List({ products }: { products: Product[] }) {
   return (

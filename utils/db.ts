@@ -23,4 +23,16 @@ async function closeDB() {
   console.log("Disconnected to db.");
 }
 
+process.on("SIGINT", async () => {
+  try {
+    console.log("Closing database connection...");
+    await closeDB();
+    console.log("Database connection closed.");
+    process.exit(0);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+});
+
 export { connectDB, closeDB };
