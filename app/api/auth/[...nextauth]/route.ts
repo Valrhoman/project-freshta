@@ -5,7 +5,7 @@ import { closeDB, connectDB } from "@/utils/db";
 import User from "@/utils/models/Users";
 import { compare } from "bcryptjs";
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       id: "credentials",
