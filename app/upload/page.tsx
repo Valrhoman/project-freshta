@@ -11,9 +11,12 @@ export const metadata = {
 };
 
 async function getProducts() {
-  const res = await fetch("http://localhost:3000/api/products", {
-    cache: "no-store",
-  });
+  const res = await fetch(
+    `${process.env.APP_URL || "http://localhost:3000"}` + "/api/products",
+    {
+      cache: "no-store",
+    }
+  );
   const data = await res.json();
   console.log("fetching api/products");
   return data;
