@@ -52,14 +52,6 @@ export default function Hero() {
               Try Healthier Produce
             </p>
           </HeroButton>
-          <button
-            onClick={() => {
-              console.log(session);
-              console.log(data);
-            }}
-          >
-            session
-          </button>
         </div>
       </div>
     </>
