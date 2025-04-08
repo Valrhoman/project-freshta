@@ -3,7 +3,7 @@ import { closeDB, connectDB } from "@/utils/db";
 import Product from "@/utils/models/Product";
 import mongoose from "mongoose";
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   try {
     if (mongoose.connection.readyState !== 1) {
       await connectDB();

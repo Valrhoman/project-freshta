@@ -22,7 +22,7 @@ export default function LoginForm() {
   });
 
   const router = useRouter();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   //TODO handle redirection to specific page after logging in
 
   function handleFocus(e: React.FocusEvent<HTMLInputElement>) {
