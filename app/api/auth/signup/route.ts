@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import { data } from "autoprefixer";
 import { connectDB, closeDB } from "@/utils/db";
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   try {
     await connectDB();
 

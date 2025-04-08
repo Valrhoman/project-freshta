@@ -4,12 +4,11 @@ import ShopbyCateg from "@/components/ShopbyCateg";
 import FeaturedCard from "@/components/FeaturedCard";
 
 async function getProducts() {
-  const res = await fetch(
-    `${process.env.APP_URL || "http://localhost:3000"}` + "/api/products",
-    {
-      cache: "no-store",
-    }
-  );
+  const url =
+    `${process.env.APP_URL || "http://localhost:3000"}` + "/api/products";
+  const res = await fetch(url, {
+    cache: "no-store",
+  });
   const data = await res.json();
 
   return data;
@@ -17,7 +16,6 @@ async function getProducts() {
 
 export default async function Home() {
   const products = await getProducts();
-  console.log(products);
   return (
     <main className="flex min-h-screen flex-col">
       <Hero />
