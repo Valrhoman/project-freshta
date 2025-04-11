@@ -5,9 +5,7 @@ import mongoose from "mongoose";
 
 export async function POST(req: Request) {
   try {
-    if (mongoose.connection.readyState !== 1) {
-      await connectDB();
-    }
+    await connectDB();
 
     const formData = await req.formData();
 
@@ -34,9 +32,7 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
-    if (mongoose.connection.readyState !== 1) {
-      await connectDB();
-    }
+    await connectDB();
 
     const products = await Product.find({}).exec();
     return NextResponse.json(products);

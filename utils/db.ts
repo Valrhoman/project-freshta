@@ -1,21 +1,42 @@
 import mongoose from "mongoose";
 
 if (!process.env.MONGODB_URI) {
-  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
+  throw new Error("Please define the MONGODB_URI environment variable");
 }
 const uri = process.env.MONGODB_URI;
 
-let db = null;
+declare global {
+  // this extends the Node.js global type
+  var mongoose: {
+    conn: typeof import("mongoose") | null;
+    promise: Promise<typeof import("mongoose")> | null;
+  };
+}
+
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
 
 // Connect to the MongoDB database using Mongoose
 async function connectDB() {
-  try {
-    await mongoose.connect(uri, { dbName: "freshtaDB" });
-    console.log("Successfully connected to MongoDB");
-  } catch (err: any) {
-    console.error(`Error: ${err.message}`);
-    process.exit(1);
+  if (cached.conn) return cached.conn;
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(uri, {
+      dbName: "freshtaDB",
+    });
   }
+
+  try {
+    cached.conn = await cached.promise;
+  } catch (err) {
+    cached.promise = null;
+    throw err;
+  }
+
+  return cached.conn;
 }
 
 async function closeDB() {
