@@ -3,7 +3,7 @@ import Dots from "./Dots";
 
 export default function ImageSlider({ onClick, visibleEl }: ImageSliderProps) {
   return (
-    <div className="relative">
+    <div className="relative lg:w-1/2 ml-auto">
       <Image
         className={`w-full ${visibleEl === 0 ? "" : "hidden"}`}
         src="/images/pexels-zen-chung-5529606.jpg"

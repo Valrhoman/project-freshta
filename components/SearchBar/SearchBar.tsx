@@ -3,38 +3,31 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { FiSearch, FiX } from "react-icons/fi";
 import { useSession } from "next-auth/react";
 
-export default function SearchBar({ open, setOpen }: any) {
-  const inputRef = useRef<HTMLInputElement>(null);
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
+  inputRef?: React.RefObject<HTMLInputElement>;
+}
+
+export default function SearchBar({ inputRef, ...props }: Props) {
+  // const inputRef = useRef<HTMLInputElement>(null);
   const [inputData, setInputData] = useState("");
   const { data: session } = useSession();
-
-  useEffect(() => {
-    if (open) {
-      inputRef.current?.focus();
-    }
-  }, [open]);
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputData(e.target.value);
   }
-  function handleClose() {
-    setOpen(false);
-    setInputData("");
-  }
+  // function handleClose() {
+  //   setOpen?.(false);
+  //   setInputData("");
+  // }
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    console.log("subsubmitmit");
   }
   return (
-    <div
-      className={`relative mt-6 -mb-2 pt-6 border-t z-10 border-gray-100 ${
-        open ? "" : "hidden"
-      } transition-all`}
-    >
-      <form onSubmit={handleSubmit} className="flex">
+    <div className={`z-10 transition-all w-full`} {...props}>
+      <form onSubmit={handleSubmit} className="flex relative">
         <input
           ref={inputRef}
-          className="py-4 pl-4 pr-16 rounded-xl w-full text-xl font-poppins outline-none border border-gray-200 focus:outline-greeny-200 focus:outline-2 outline-offset-0"
+          className="py-4 pl-4 pr-16 rounded-3xl w-full text-xl font-poppins outline-2 outline-gray-50 bg-gray-50 focus:bg-white focus:outline-greeny-200  outline-offset-0"
           placeholder="Search fresh bananas, apples, greens, etc."
           autoComplete="true"
           onChange={handleInputChange}
@@ -42,17 +35,10 @@ export default function SearchBar({ open, setOpen }: any) {
         />
         <button
           type="submit"
-          className="absolute right-12 mt-6 top-4 flex items-center px-4 rounded-lg"
+          className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center px-4 py-4 rounded-lg  group"
           title="Search fresh products"
         >
-          <FiSearch className="text-3xl text-gray-500  hover:text-greeny-400" />
-        </button>
-        <button
-          type="button"
-          className="self-center ml-3 text-gray-400 hover:text-greeny-700"
-          onClick={handleClose}
-        >
-          <FiX className="text-3xl" />
+          <FiSearch className="text-3xl text-gray-500  group-hover:text-greeny-700" />
         </button>
       </form>
       {session && <RecentSearches />}

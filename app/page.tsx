@@ -17,7 +17,7 @@ async function getProducts() {
 export default async function Home() {
   const products = await getProducts();
   return (
-    <main className="flex min-h-screen flex-col">
+    <main className="flex min-h-screen flex-col mx-auto">
       <Hero />
       <Featured products={products} />
       <ShopbyCateg />
