@@ -2,7 +2,7 @@ import "./globals.css";
 import { Poppins } from "next/font/google";
 import { Metadata } from "next";
 import Footer from "@/components/Footer/Footer";
-import { NavBar, NavPanel } from "@/components/Nav";
+import { NavBar } from "@/components/Nav";
 import Provider from "@/components/Provider";
 
 const poppins = Poppins({

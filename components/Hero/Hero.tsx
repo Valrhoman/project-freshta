@@ -6,8 +6,8 @@ import { useSession } from "next-auth/react";
 
 export default function Hero() {
   const [visibleEl, setVisibleEl] = useState<number>(0);
-  const { data: session } = useSession();
-  const data = useSession();
+  // const { data: session } = useSession();
+  // const data = useSession();
 
   const handleClick: MouseEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();
@@ -15,7 +15,7 @@ export default function Hero() {
   };
 
   return (
-    <>
+    <div className="md:flex md:flex-row-reverse">
       <ImageSlider onClick={handleClick} visibleEl={visibleEl} />
 
       <div className="mx-8 my-12">
@@ -54,6 +54,6 @@ export default function Hero() {
           </HeroButton>
         </div>
       </div>
-    </>
+    </div>
   );
 }
