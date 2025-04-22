@@ -9,6 +9,15 @@
   --green-rgb: ;
 }
 
+@layer utilities {
+  .bg-position-100 {
+    background-position: 100% 0%;
+  }
+  .bg-position-0 {
+    background-position: 0% 0%;
+  }
+}
+
 @media (color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
