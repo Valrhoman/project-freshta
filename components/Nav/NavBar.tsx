@@ -57,11 +57,12 @@ export default function NavBar() {
   return (
     <>
       <div
-        className={`fixed top-0 z-50 w-full px-8 py-6 sm:px-12 sm:py-8 md:px-16 md:py-10 lg:py-12  border-slate-100 bg-white ${
+        className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full py-6 sm:py-8  md:py-10 lg:py-12 border-slate-100 bg-blue-1  ${
           isScrolled ? "shadow-md" : ""
         } `}
+        style={{ backgroundColor: "rgba(255, 255, 255, 0.97)" }}
       >
-        <div className="flex items-center justify-between h-10 lg:max-w-[120rem] mx-auto ">
+        <div className="flex items-center justify-between px-8 sm:px-16 h-10 mx-auto sm:max-w-[120rem]  bg-orange-5">
           <Link href="/">
             <div className="w-36 h-10 relative">
               <Image src="/freshta-logo.svg" alt="freshta logo" fill priority />
