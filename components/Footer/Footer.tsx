@@ -91,7 +91,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-6 md:mt-12">
-          <p className="text-gray-500 text-xl sm:text-2xl lg:text-3xl">
+          <p className="text-gray-500 text-lg sm:text-xl lg:text-2xl">
             &copy; 2022 Freshta by <Link href="#">Alrho</Link>. All rights
             reserved.
           </p>
