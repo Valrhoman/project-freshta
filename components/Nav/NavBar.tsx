@@ -57,7 +57,15 @@ export default function NavBar() {
   return (
     <>
       <div
-        className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full py-6 sm:py-8  md:py-10 lg:py-12 border-slate-100 bg-blue-1  ${
+        className={`fixed top-0 left-0 w-full h-full bg-black transition-opacity duration-300 z-40 ${
+          showPanel
+            ? "opacity-50 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setShowPanel(false)}
+      />
+      <div
+        className={`fixed top-0 left-1/2 -translate-x-1/2 z-30 w-full py-6 sm:py-8  md:py-10 lg:py-12 border-slate-100 bg-blue-1  ${
           isScrolled ? "shadow-md" : ""
         } `}
         style={{ backgroundColor: "rgba(255, 255, 255, 0.97)" }}

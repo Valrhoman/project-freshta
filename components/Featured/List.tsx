@@ -5,7 +5,7 @@ import { HiOutlinePlus } from "react-icons/hi";
 
 export default function List({ products }: { products?: Product[] }) {
   return (
-    <div className="flex gap-16 w-auto h-auto overflow-x-scroll p-4 pb-12">
+    <div className="flex gap-16 w-auto h-auto overflow-x-auto p-4 pb-12">
       {products?.map((item) => (
         <div key={item._id} className="shadow-lg rounded-3xl relative">
           <div className="overflow-hidden rounded-3xl">

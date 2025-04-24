@@ -16,6 +16,27 @@
   .bg-position-0 {
     background-position: 0% 0%;
   }
+
+  /* Footer */
+  .footer-header {
+    @apply font-semibold text-2xl md:text-3xl lg:text-4xl text-greeny-700;
+  }
+
+  .footer-list {
+    @apply text-xl sm:text-2xl lg:text-3xl space-y-2 md:space-y-4 lg:space-y-6 mt-4 sm:mt-6 md:mt-8;
+  }
+
+  .footer-li {
+    @apply hover:text-greeny-400 cursor-pointer transition-colors;
+  }
+
+  .footer-follow-li {
+    @apply flex items-center footer-li;
+
+    .icon {
+      @apply w-auto h-auto;
+    }
+  }
 }
 
 @media (color-scheme: dark) {

@@ -63,7 +63,7 @@ export default function Hero() {
             ? "Order fresh and locally sourced fruits and vegetables today!"
             : "Exclusive offer available for first-time customers only."}
         </p>
-        <div className="text-2xl font-medium mb-12 ">
+        <div className="text-2xl lg:text-3xl font-medium mb-12 ">
           <HeroButton route="/">
             {visibleEl === 0 ? "Order Local Produce" : "Try Healthier Produce"}
           </HeroButton>
@@ -71,7 +71,7 @@ export default function Hero() {
       </div>
 
       {/* Dots nav */}
-      <div className="absolute bottom-0 left-0 z-50 flex gap-3 ml-8 sm:ml-16 justify-center items-center">
+      <div className="absolute bottom-0 left-0 z-20 flex gap-3 ml-8 sm:ml-16 justify-center items-center">
         <Dots onClick={handleClick} visibleEl={visibleEl} />
       </div>
     </div>

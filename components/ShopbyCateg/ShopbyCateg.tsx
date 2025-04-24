@@ -1,9 +1,10 @@
 import Link from "next/link";
 export default function ShopbyCateg() {
   return (
-    <div className="flex flex-col mx-8 mb-16 text-4xl font-poppins font-semibold text-white space-y-4">
+    <div className="flex flex-col space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-6 w-full max-w-[120rem] mb-16 sm:mx-auto px-8 sm:px-16 text-4xl font-poppins font-semibold text-white">
       <CategItem name="Fruits" />
       <CategItem name="Vegetables" />
+      <CategItem name="Herbs" />
       <CategItem name="Shop All" />
     </div>
   );
