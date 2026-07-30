@@ -1,0 +1,14 @@
+{
+  "name": "nextjs-dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "workspaceFolder": "/app",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind",
+  "remoteUser": "node",
+  "postCreateCommand": "npm install",
+  "forwardPorts": [3000]
+}
