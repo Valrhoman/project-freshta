@@ -1,5 +1,5 @@
 import Link from "next/link";
-export default function Option({ to }: any) {
+export default function Option({ to }: { to: string }) {
   return (
     <>
       {to === "/account/register" && (

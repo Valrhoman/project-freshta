@@ -19,9 +19,19 @@ if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
 }
 
-// Connect to the MongoDB database using Mongoose
+// Connect to the MongoDB database using Mongoose.
+// Keep the connection open across requests (Next.js / serverless best practice).
 async function connectDB() {
-  if (cached.conn) return cached.conn;
+  // readyState: 0 disconnected, 1 connected, 2 connecting, 3 disconnecting
+  if (cached.conn && mongoose.connection.readyState === 1) {
+    return cached.conn;
+  }
+
+  // Stale cache after closeDB() — force a fresh connect
+  if (mongoose.connection.readyState === 0) {
+    cached.conn = null;
+    cached.promise = null;
+  }
 
   if (!cached.promise) {
     cached.promise = mongoose.connect(uri, {
@@ -33,6 +43,7 @@ async function connectDB() {
     cached.conn = await cached.promise;
   } catch (err) {
     cached.promise = null;
+    cached.conn = null;
     throw err;
   }
 
@@ -40,8 +51,16 @@ async function connectDB() {
 }
 
 async function closeDB() {
+  if (mongoose.connection.readyState === 0) {
+    cached.conn = null;
+    cached.promise = null;
+    return;
+  }
+
   await mongoose.connection.close();
-  console.log("Disconnected to db.");
+  cached.conn = null;
+  cached.promise = null;
+  console.log("Disconnected from db.");
 }
 
 process.on("SIGINT", async () => {

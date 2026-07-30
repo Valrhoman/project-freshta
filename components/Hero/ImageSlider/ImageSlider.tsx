@@ -1,7 +1,6 @@
 import Image from "next/image";
-import Dots from "./Dots";
 
-export default function ImageSlider({ onClick, visibleEl }: ImageSliderProps) {
+export default function ImageSlider({ visibleEl }: ImageSliderProps) {
   const className = (id: number) =>
     `w-full ${visibleEl === id ? "" : "hidden"} sm:rounded-3xl`;
   return (

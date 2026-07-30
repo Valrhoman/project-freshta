@@ -1,22 +1,22 @@
-"use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Option from "./Option";
-import { CgSpinner } from "react-icons/cg";
-import InputField from "./InputField";
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Option from './Option';
+import { CgSpinner } from 'react-icons/cg';
+import InputField from './InputField';
 
 const signupFormInit = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
 };
 
 export default function CreateAccountForm() {
   const [formData, setFormData] = useState(signupFormInit);
-  const [submitError, setSubmitError] = useState<string>("");
-  const [focusedInput, setFocusedInput] = useState("");
+  const [submitError, setSubmitError] = useState<string>('');
+  const [focusedInput, setFocusedInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
@@ -28,14 +28,14 @@ export default function CreateAccountForm() {
   }
 
   function handleBlur() {
-    setFocusedInput("");
+    setFocusedInput('');
   }
 
   function handlePasswordMismatch(e: React.ChangeEvent<HTMLInputElement>) {
     if (formData.password !== formData.confirmPassword) {
-      e.target.setCustomValidity("Passwords do not match");
+      e.target.setCustomValidity('Passwords do not match');
     } else {
-      e.target.setCustomValidity("");
+      e.target.setCustomValidity('');
     }
   }
 
@@ -51,22 +51,20 @@ export default function CreateAccountForm() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
-    setSubmitError("");
-
-    console.log(formData.password, formData.confirmPassword);
+    setSubmitError('');
 
     // Handle form submission
     const formDataToDB = new FormData();
 
-    formDataToDB.append("firstName", formData.firstName);
-    formDataToDB.append("lastName", formData.lastName);
-    formDataToDB.append("email", formData.email);
-    formDataToDB.append("password", formData.password);
+    formDataToDB.append('firstName', formData.firstName);
+    formDataToDB.append('lastName', formData.lastName);
+    formDataToDB.append('email', formData.email);
+    formDataToDB.append('password', formData.password);
 
     // Send data to api/auth/signup POST handler
     try {
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
         body: formDataToDB,
       });
 
@@ -75,13 +73,11 @@ export default function CreateAccountForm() {
         // Save data in session using next-auth
         setIsLoading(false);
 
-        console.log(resData.returnUserData);
-
         // Reset the form element and formData state
         setFormData(signupFormInit);
         const form = e.target as HTMLFormElement;
         form.reset();
-        router.replace("/account/login");
+        router.replace('/account/login');
       } else {
         setIsLoading(false);
         throw new Error(resData.error);
@@ -94,16 +90,16 @@ export default function CreateAccountForm() {
   }
 
   return (
-    <div className="mx-8 my-36 font-poppins">
-      <h2 className="text-4xl font-semibold text-greeny-600 my-12">
+    <div className='mx-8 my-36 font-poppins'>
+      <h2 className='text-4xl font-semibold text-greeny-600 my-12'>
         Create Account
       </h2>
       <div>
-        <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
+        <form className='flex flex-col gap-8' onSubmit={handleSubmit}>
           <InputField
-            type="text"
-            name="firstName"
-            label="First Name"
+            type='text'
+            name='firstName'
+            label='First Name'
             value={formData.firstName}
             focusedInput={focusedInput}
             onFocus={handleFocus}
@@ -112,9 +108,9 @@ export default function CreateAccountForm() {
             required
           />
           <InputField
-            type="text"
-            name="lastName"
-            label="Last Name"
+            type='text'
+            name='lastName'
+            label='Last Name'
             value={formData.lastName}
             focusedInput={focusedInput}
             onFocus={handleFocus}
@@ -123,9 +119,9 @@ export default function CreateAccountForm() {
             required
           />
           <InputField
-            type="email"
-            name="email"
-            label="Email Address"
+            type='email'
+            name='email'
+            label='Email Address'
             value={formData.email}
             focusedInput={focusedInput}
             onFocus={handleFocus}
@@ -134,9 +130,9 @@ export default function CreateAccountForm() {
             required
           />
           <InputField
-            type="password"
-            name="password"
-            label="Password"
+            type='password'
+            name='password'
+            label='Password'
             value={formData.password}
             focusedInput={focusedInput}
             onFocus={handleFocus}
@@ -146,9 +142,9 @@ export default function CreateAccountForm() {
             minLength={8}
           />
           <InputField
-            type="password"
-            name="confirmPassword"
-            label="Confirm Password"
+            type='password'
+            name='confirmPassword'
+            label='Confirm Password'
             value={formData.confirmPassword}
             focusedInput={focusedInput}
             onFocus={handleFocus}
@@ -161,26 +157,26 @@ export default function CreateAccountForm() {
           />
 
           {isLoading && (
-            <CgSpinner className="animate-spin self-center text-6xl text-gray-700" />
+            <CgSpinner className='animate-spin self-center text-6xl text-gray-700' />
           )}
 
           {submitError && (
-            <p className="text-red-500 text-center text-lg font-semibold">
+            <p className='text-red-500 text-center text-lg font-semibold'>
               {submitError}
             </p>
           )}
 
           <button
-            type="submit"
+            type='submit'
             className={`bg-greeny-400 py-4 text-2xl text-white mt-4 rounded-xl ${
-              isLoading && "opacity-50"
+              isLoading && 'opacity-50'
             }`}
             disabled={isLoading}
           >
             Register
           </button>
         </form>
-        <Option to={"/account/login"} />
+        <Option to={'/account/login'} />
       </div>
     </div>
   );
