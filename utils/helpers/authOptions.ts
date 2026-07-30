@@ -1,55 +1,60 @@
-import type { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { closeDB, connectDB } from "@/utils/db";
-import User from "@/utils/models/Users";
-import { compare } from "bcryptjs";
+import type { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { connectDB } from '@/utils/db';
+import User from '@/utils/models/Users';
+import { compare } from 'bcryptjs';
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      id: "credentials",
-      name: "Credentials",
+      id: 'credentials',
+      name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        await connectDB().catch((err) => {
-          throw new Error(err);
-        });
+        await connectDB();
 
         const user = await User.findOne({ email: credentials?.email }).select(
-          "+password"
+          '+password',
         );
 
         if (!user) {
-          throw new Error("Invalid email or password");
+          throw new Error('Invalid email or password');
         }
 
         const isPasswordCorrect = await compare(
           credentials!.password,
-          user.password
+          user.password,
         );
 
         if (!isPasswordCorrect) {
-          throw new Error("Invalid email or password");
+          throw new Error('Invalid email or password');
         }
 
-        await closeDB();
-
-        return user;
+        // Do not close the shared mongoose connection — Next.js reuses it across requests.
+        return {
+          id: user._id.toString(),
+          _id: user._id.toString(),
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        };
       },
     }),
   ],
   pages: {
-    signIn: "/account/login",
+    signIn: '/account/login',
   },
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   callbacks: {
     jwt: async ({ token, user }) => {
-      user && (token.user = user);
+      if (user) {
+        token.user = user;
+      }
       return token;
     },
     session: async ({ session, token }) => {

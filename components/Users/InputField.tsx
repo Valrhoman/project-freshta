@@ -15,8 +15,7 @@ export default function InputField({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus: (e: React.FocusEvent<HTMLInputElement>) => void;
   onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  [key: string]: any;
-}) {
+} & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <label className="relative" htmlFor={name}>
       <p

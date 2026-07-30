@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   images: {
     remotePatterns: [
       {
@@ -13,11 +14,6 @@ const nextConfig = {
     ],
   },
   serverExternalPackages: ["mongoose"],
-
-  webpack(config) {
-    config.experiments = { ...config.experiments, topLevelAwait: true };
-    return config;
-  },
 };
 
 module.exports = nextConfig;

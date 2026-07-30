@@ -1,6 +1,19 @@
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import Image from "next/image";
 import { NavBar } from "@/components/Nav";
 import UploadForm from "@/components/UploadForm";
-import Image from "next/image";
+import { authOptions } from "@/utils/helpers/authOptions";
+import { getProducts } from "@/utils/helpers/getProducts";
+
+type ProductItem = {
+  _id: string;
+  name: string;
+  weight: number;
+  price: number;
+  imageUrl: string;
+  tags: string[];
+};
 
 export const metadata = {
   title: "Post new product",
@@ -10,27 +23,20 @@ export const metadata = {
     "freshta, fresh produce, sell, upload, post, vegetables, fruits, local produce",
 };
 
-async function getProducts() {
-  const res = await fetch(
-    `${process.env.APP_URL || "http://localhost:3000"}` + "/api/products",
-    {
-      cache: "no-store",
-    }
-  );
-  const data = await res.json();
-  console.log("fetching api/products");
-  return data;
-}
-
 export default async function Upload() {
-  const products = await getProducts();
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect("/account/login?callbackUrl=/upload");
+  }
+
+  const products = (await getProducts()) as ProductItem[];
   return (
     <div>
       <NavBar />
       <div className="h-40"></div>
       Upload
       <UploadForm />
-      {products.map((item: any) => {
+      {products.map((item) => {
         return (
           <div key={item._id}>
             <Image

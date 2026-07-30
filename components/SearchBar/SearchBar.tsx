@@ -1,6 +1,6 @@
 "use client";
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { FiSearch, FiX } from "react-icons/fi";
+import { FormEvent, useState, type ReactNode } from "react";
+import { FiSearch } from "react-icons/fi";
 import { useSession } from "next-auth/react";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -61,7 +61,7 @@ function RecentSearches() {
   );
 }
 
-function RecentListItem({ children }: any) {
+function RecentListItem({ children }: { children: ReactNode }) {
   return (
     <li className="cursor-pointer hover:text-greeny-500 self-start">
       <FiSearch className="inline-block mr-4" />

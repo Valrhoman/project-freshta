@@ -1,0 +1,22 @@
+# Dependencies & build output
+node_modules/
+.next/
+out/
+build/
+coverage/
+
+# Lockfile (huge, low signal for agents)
+package-lock.json
+
+# Binary / media assets
+public/images/
+public/favicons/
+
+# Env & local tooling
+.env
+.env.*
+!.env.example
+.vercel/
+*.tsbuildinfo
+*.pem
+.DS_Store

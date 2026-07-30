@@ -8,39 +8,32 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "dependencies": {
-    "@firebase/auth": "^0.23.2",
-    "@firebase/firestore": "^4.7.10",
-    "@firebase/functions": "^0.9.4",
-    "@firebase/storage": "^0.11.2",
-    "@types/node": "20.1.2",
-    "@types/react": "18.2.6",
-    "@types/react-dom": "18.2.4",
-    "autoprefixer": "10.4.14",
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.1",
-    "encoding": "^0.1.13",
-    "eslint-config-next": "13.4.1",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "15.5.22",
     "firebase": "^11.6.0",
     "mongodb": "^6.15.0",
     "mongoose": "^8.13.2",
-    "next": "^15.2.4",
+    "next": "15.5.22",
     "next-auth": "^4.22.1",
-    "node-fetch": "^3.3.1",
-    "postcss": "^8.5.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
-    "react-image-file-resizer": "^0.4.8",
-    "tailwindcss": "3.3.2",
-    "typescript": "5.0.4"
+    "react-image-file-resizer": "^0.4.8"
   },
   "devDependencies": {
-    "@eslint/js": "^9.24.0",
     "@types/bcryptjs": "^2.4.2",
-    "eslint": "^8.57.1",
-    "eslint-plugin-react": "^7.37.5",
-    "globals": "^16.0.0",
-    "typescript-eslint": "^8.29.1"
+    "@types/node": "^20.17.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.5.3",
+    "tailwindcss": "3.3.2",
+    "typescript": "^5.8.3"
   }
 }

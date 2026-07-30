@@ -1,11 +1,10 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Option from './Option';
 import { CgSpinner } from 'react-icons/cg';
 import { loginUser } from '@/utils/helpers/loginUser';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import InputField from './InputField';
-import { useSession } from 'next-auth/react';
 
 const loginFormInit = {
   email: '',
@@ -17,12 +16,8 @@ export default function LoginForm() {
   const [formData, setFormData] = useState(loginFormInit);
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string>('');
-  const { data: session } = useSession({
-    required: false,
-  });
 
   const router = useRouter();
-  // const searchParams = useSearchParams();
   //TODO handle redirection to specific page after logging in
 
   function handleFocus(e: React.FocusEvent<HTMLInputElement>) {

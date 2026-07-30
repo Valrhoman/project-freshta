@@ -2,10 +2,8 @@
 import { useState, MouseEventHandler, useEffect, useRef } from "react";
 import HeroButton from "./HeroButton";
 import ImageSlider from "./ImageSlider";
-import { useSession } from "next-auth/react";
 import clsx from "clsx";
 import Dots from "./ImageSlider/Dots";
-import Link from "next/link";
 
 export default function Hero() {
   const [visibleEl, setVisibleEl] = useState<number>(0);

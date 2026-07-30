@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { closeDB, connectDB } from "@/utils/db";
+import { connectDB } from "@/utils/db";
 import Product from "@/utils/models/Product";
-import mongoose from "mongoose";
 
 export async function POST(req: Request) {
   try {
@@ -22,12 +21,11 @@ export async function POST(req: Request) {
     });
     const result = await product.save();
     return NextResponse.json({ result });
-  } catch (err: any) {
+  } catch (err) {
     console.error(err);
-    throw new Error(err);
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
-
-  //
 }
 
 export async function GET() {
@@ -36,9 +34,9 @@ export async function GET() {
 
     const products = await Product.find({}).exec();
     return NextResponse.json(products);
-  } catch (err: any) {
+  } catch (err) {
     console.error(err);
-    throw new Error(err);
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
-  //
 }
