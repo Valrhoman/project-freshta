@@ -2,7 +2,7 @@
 
 ## Stack
 
-- Next.js 15 App Router (`app/`), React 18, TypeScript, Tailwind CSS 3
+- Next.js 15.5 App Router (`app/`), React 18, TypeScript, Tailwind CSS 3
 - Auth: next-auth v4 (Credentials) — not Auth.js v5 yet
 - DB: MongoDB via Mongoose (`utils/db.ts`, `utils/models/`)
 - Images: Firebase Storage (`utils/imageStorage.ts`)

@@ -1,0 +1,14 @@
+---
+description: Prevent agents from bypassing build/permission errors by editing config
+globs: next.config.js,next.config.ts,package.json,Dockerfile,.devcontainer/**
+---
+
+# Build & permissions policy
+
+- Never modify `distDir`, `outDir`, or any build output path to work
+  around a permissions or EACCES error.
+- Never add `sudo` to npm/yarn/pnpm scripts or suggest running builds with sudo.
+- If a build or install step fails due to permissions, stop and report
+  the exact error and the path involved. Do not apply a workaround.
+- Permission errors are fixed with `chown -R $(whoami) .next node_modules`,
+  not by relocating the output directory.
