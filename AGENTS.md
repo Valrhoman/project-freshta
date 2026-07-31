@@ -17,10 +17,10 @@
 
 Copy `.env.example` → `.env.local`. Required vars:
 
-- `MONGODB_URI`, `NEXTAUTH_URL`, `NEXTAUTH_SECRET`, `APP_URL`
+- `DB_USER`, `DB_PASSWORD`, `DB_CLUSTER`, `NEXTAUTH_URL`, `NEXTAUTH_SECRET`, `APP_URL`
 - `NEXT_PUBLIC_FIREBASE_*` (client Firebase config)
 
-Never commit `.env` / `.env.local`. Prefer URI without spaces around `=`.
+Never commit `.env` / `.env.local`. Prefer no spaces around `=`.
 
 ## Security
 
