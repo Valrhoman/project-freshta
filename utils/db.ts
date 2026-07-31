@@ -1,9 +1,14 @@
 import mongoose from "mongoose";
 
-if (!process.env.MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable");
+const { DB_USER, DB_PASSWORD, DB_CLUSTER } = process.env;
+
+if (!DB_USER || !DB_PASSWORD || !DB_CLUSTER) {
+  throw new Error(
+    "Please define DB_USER, DB_PASSWORD, and DB_CLUSTER environment variables"
+  );
 }
-const uri = process.env.MONGODB_URI;
+
+const uri = `mongodb+srv://${encodeURIComponent(DB_USER)}:${encodeURIComponent(DB_PASSWORD)}@${DB_CLUSTER}/?retryWrites=true&w=majority`;
 
 declare global {
   // this extends the Node.js global type
