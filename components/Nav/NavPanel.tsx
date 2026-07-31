@@ -72,7 +72,7 @@ export default function NavPanel({
             </Link>
             <button
               onClick={() => {
-                signOut();
+                signOut({ callbackUrl: '/account/login' });
                 setOpen(false);
               }}
               className="text-left hover:text-red-600 transition-all"

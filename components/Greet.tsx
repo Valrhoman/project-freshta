@@ -12,7 +12,7 @@ export default function Greet() {
           Hi, {session && session?.user?.firstName}!
           <button
             className="text-4xl p-4 bg-blue-500"
-            onClick={() => signOut()}
+            onClick={() => signOut({ callbackUrl: '/account/login' })}
           >
             {" "}
             Sign Out
