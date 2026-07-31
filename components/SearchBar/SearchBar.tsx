@@ -4,7 +4,7 @@ import { FiSearch } from "react-icons/fi";
 import { useSession } from "next-auth/react";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  inputRef?: React.RefObject<HTMLInputElement>;
+  inputRef?: React.RefObject<HTMLInputElement | null>;
 }
 
 export default function SearchBar({ inputRef, ...props }: Props) {

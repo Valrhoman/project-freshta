@@ -1,0 +1,25 @@
+---
+description: Scope Python to throwaway/scratch tasks only, not application code
+globs: **/*.py,requirements.txt,pyproject.toml
+---
+
+# Python usage policy
+
+Python is installed in this devcontainer for ad hoc, throwaway tasks only —
+data wrangling, one-off scripts, parsing/inspecting files dropped into the
+project, quick calculations. It is NOT part of this project's stack.
+
+- Do not write application logic, API routes, build tooling, or anything
+  that ships to production in Python. This is a Next.js/TypeScript project;
+  use TS/Node for anything that becomes part of the codebase.
+- Scratch scripts belong in a gitignored `/scratch` or `/tmp` folder, not
+  mixed into `src/`, `app/`, or other project source directories.
+- If a task seems to call for a Python script, first consider whether it's
+  actually a one-off (fine) or something that should be a proper Node
+  script or app feature (write it in TS instead).
+- Never add `requirements.txt`, `pyproject.toml`, or any Python dependency
+  file to the repo without explicit confirmation — if a Python package is
+  needed for a scratch task, install it into a local venv
+  (`python3 -m venv .venv && source .venv/bin/activate && pip install ...`),
+  not system-wide.
+- Do not use `pip install --break-system-packages` — use a venv instead.

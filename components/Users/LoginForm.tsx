@@ -45,10 +45,12 @@ export default function LoginForm() {
     try {
       const response = await loginUser(formData);
 
-      if (response && response.error !== null) {
-        setSubmitError(response.error || '');
-      } else {
+      if (response?.error) {
+        setSubmitError(response.error);
+      } else if (response?.ok) {
         router.push('/'); // TODO modify this to depend on URL search params
+      } else {
+        setSubmitError('Unable to sign in. Please try again.');
       }
     } catch (err) {
       if (err instanceof Error) {

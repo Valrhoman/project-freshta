@@ -1,9 +1,8 @@
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { NavBar } from "@/components/Nav";
 import UploadForm from "@/components/UploadForm";
-import { authOptions } from "@/utils/helpers/authOptions";
+import { auth } from "@/auth";
 import { getProducts } from "@/utils/helpers/getProducts";
 
 type ProductItem = {
@@ -24,7 +23,7 @@ export const metadata = {
 };
 
 export default async function Upload() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session) {
     redirect("/account/login?callbackUrl=/upload");
   }

@@ -1,12 +1,12 @@
-import type { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import NextAuth from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
+import { compare } from 'bcryptjs';
 import { connectDB } from '@/utils/db';
 import User from '@/utils/models/Users';
-import { compare } from 'bcryptjs';
 
-export const authOptions: NextAuthOptions = {
+export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
-    CredentialsProvider({
+    Credentials({
       id: 'credentials',
       name: 'Credentials',
       credentials: {
@@ -14,20 +14,22 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
+        const email = credentials?.email as string | undefined;
+        const password = credentials?.password as string | undefined;
+
+        if (!email || !password) {
+          throw new Error('Invalid email or password');
+        }
+
         await connectDB();
 
-        const user = await User.findOne({ email: credentials?.email }).select(
-          '+password',
-        );
+        const user = await User.findOne({ email }).select('+password');
 
         if (!user) {
           throw new Error('Invalid email or password');
         }
 
-        const isPasswordCorrect = await compare(
-          credentials!.password,
-          user.password,
-        );
+        const isPasswordCorrect = await compare(password, user.password);
 
         if (!isPasswordCorrect) {
           throw new Error('Invalid email or password');
@@ -53,15 +55,27 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user) {
-        token.user = user;
+        token.user = {
+          _id: (user as { _id: string })._id,
+          email: user.email!,
+          firstName: (user as { firstName: string }).firstName,
+          lastName: (user as { lastName: string }).lastName,
+        };
       }
       return token;
     },
     session: async ({ session, token }) => {
-      const user: UserType = token.user as UserType;
-      session.user = user;
-
+      if (token.user) {
+        session.user = {
+          ...session.user,
+          _id: token.user._id,
+          email: token.user.email,
+          firstName: token.user.firstName,
+          lastName: token.user.lastName,
+        };
+      }
       return session;
     },
   },
-};
+  trustHost: true,
+});

@@ -181,7 +181,10 @@ export default function UploadForm() {
       {session && (
         <>
           <p>{session && session.user?.email}</p>
-          <button className="text-2xl p-4" onClick={() => signOut()}>
+          <button
+            className="text-2xl p-4"
+            onClick={() => signOut({ callbackUrl: '/account/login' })}
+          >
             Sign out
           </button>
         </>
