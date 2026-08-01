@@ -17,8 +17,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const email = credentials?.email as string | undefined;
         const password = credentials?.password as string | undefined;
 
+        // Return null (do not throw) so Auth.js yields CredentialsSignin
+        // instead of redirecting to the broken default /api/auth/error page.
         if (!email || !password) {
-          throw new Error('Invalid email or password');
+          return null;
         }
 
         await connectDB();
@@ -26,13 +28,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const user = await User.findOne({ email }).select('+password');
 
         if (!user) {
-          throw new Error('Invalid email or password');
+          return null;
         }
 
         const isPasswordCorrect = await compare(password, user.password);
 
         if (!isPasswordCorrect) {
-          throw new Error('Invalid email or password');
+          return null;
         }
 
         // Do not close the shared mongoose connection — Next.js reuses it across requests.
@@ -48,6 +50,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   pages: {
     signIn: '/account/login',
+    // Keep auth errors on the login page instead of /api/auth/error
+    error: '/account/login',
   },
   session: {
     strategy: 'jwt',

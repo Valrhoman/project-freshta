@@ -46,7 +46,11 @@ export default function LoginForm() {
       const response = await loginUser(formData);
 
       if (response?.error) {
-        setSubmitError(response.error);
+        setSubmitError(
+          response.error === 'CredentialsSignin'
+            ? 'Invalid email or password'
+            : response.error,
+        );
       } else if (response?.ok) {
         router.push('/'); // TODO modify this to depend on URL search params
       } else {

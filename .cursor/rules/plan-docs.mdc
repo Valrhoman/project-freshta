@@ -1,0 +1,49 @@
+---
+description: Write a plan doc before non-trivial multi-step tasks and record the outcome after
+---
+
+# Plan documentation policy
+
+Before starting any non-trivial task — anything that touches multiple
+files, changes project configuration (Dockerfile, devcontainer.json,
+next.config.js, CI, auth, build tooling), or involves more than a couple
+of steps — create a plan file at:
+
+`docs/plans/YYYY-MM-DD-short-slug.md`
+
+Use the current date and a short kebab-case description of the task
+(e.g. `2026-08-01-playwright-e2e-setup.md`). Skip this for trivial changes
+(typo fixes, small copy edits, single-line tweaks).
+
+## Plan file structure
+
+```md
+# <Task title>
+
+## Goal
+What this task is trying to accomplish and why.
+
+## Plan
+The proposed approach, as a short numbered list or steps.
+Note any alternatives considered and why they were rejected, if relevant.
+
+## Outcome
+(Fill in after execution)
+What actually happened. Call out anything that diverged from the plan —
+unexpected errors, workarounds, follow-up items. This section is often
+more useful later than the plan itself.
+```
+
+## Rules
+
+- Write the `Goal` and `Plan` sections *before* making changes, not
+  retroactively.
+- After the task is done (or abandoned), append the `Outcome` section
+  to the same file — don't skip this even if the task succeeded exactly
+  as planned; a short "went as expected" is still useful signal.
+- Never delete or overwrite a previous plan file. Each task gets its own
+  file, permanently kept for history.
+- After adding a new plan file, add or update a one-line entry in
+  `docs/plans/README.md` (create it if missing) linking to the file, so
+  past plans can be scanned without opening each one individually.
+- Plan files are committed to git, not gitignored.
