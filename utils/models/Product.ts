@@ -6,6 +6,11 @@ const productSchema = new Schema({
   price: Number,
   tags: Array,
   imageUrl: String,
+  ownerId: {
+    type: String,
+    required: true,
+    index: true,
+  },
   createdOn: {
     type: Date,
     default: new Date(),

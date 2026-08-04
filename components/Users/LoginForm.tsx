@@ -3,13 +3,20 @@ import React, { useState } from 'react';
 import Option from './Option';
 import { CgSpinner } from 'react-icons/cg';
 import { loginUser } from '@/utils/helpers/loginUser';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import InputField from './InputField';
 
 const loginFormInit = {
   email: '',
   password: '',
 };
+
+function safeCallbackUrl(raw: string | null): string {
+  if (raw && raw.startsWith('/') && !raw.startsWith('//')) {
+    return raw;
+  }
+  return '/';
+}
 
 export default function LoginForm() {
   const [focusedInput, setFocusedInput] = useState('');
@@ -18,7 +25,7 @@ export default function LoginForm() {
   const [submitError, setSubmitError] = useState<string>('');
 
   const router = useRouter();
-  //TODO handle redirection to specific page after logging in
+  const searchParams = useSearchParams();
 
   function handleFocus(e: React.FocusEvent<HTMLInputElement>) {
     setFocusedInput(e.target.name);
@@ -52,7 +59,7 @@ export default function LoginForm() {
             : response.error,
         );
       } else if (response?.ok) {
-        router.push('/'); // TODO modify this to depend on URL search params
+        router.push(safeCallbackUrl(searchParams.get('callbackUrl')));
       } else {
         setSubmitError('Unable to sign in. Please try again.');
       }

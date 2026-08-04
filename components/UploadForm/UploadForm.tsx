@@ -24,7 +24,7 @@ export default function UploadForm() {
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
-      redirect("/account/login?callbackUrl=/protected/upload");
+      redirect("/account/login?callbackUrl=/upload");
     },
   });
 

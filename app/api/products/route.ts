@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
+import { auth } from "@/auth";
 import { connectDB } from "@/utils/db";
 import Product from "@/utils/models/Product";
 
 export async function POST(req: Request) {
   try {
+    const session = await auth();
+    if (!session?.user?._id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     await connectDB();
 
     const formData = await req.formData();
@@ -18,6 +24,7 @@ export async function POST(req: Request) {
       price: Number(formData.get("price")), // Convert to number
       tags: tagsArr,
       imageUrl: formData.get("imageUrl"),
+      ownerId: session.user._id,
     });
     const result = await product.save();
     return NextResponse.json({ result });

@@ -68,7 +68,7 @@ Optional: open the repo in a [dev container](.devcontainer/) (`npm install` runs
 |------|--------|
 | `POST /api/auth/signup` | Register user |
 | `/api/auth/[...nextauth]` | Auth.js handlers |
-| `GET` / `POST /api/products` | List / create products (`POST` is not session-gated yet) |
+| `GET` / `POST /api/products` | List / create products (`POST` requires a session; sets `ownerId`) |
 
 ## Architecture (brief)
 
@@ -95,6 +95,7 @@ Full register/login e2e needs a dedicated test user and stable Atlas — deferre
 
 - No product update/delete APIs yet
 - Shop, cart, How It Works, Blog, Contact, and `/myAccount` nav targets are mostly stubs
+- Products created before ownership was added have no `ownerId` and will not appear under “Your listings”
 - Leftover scaffold: `GET /api/hello`
 
 ## Security
