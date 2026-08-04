@@ -1,9 +1,9 @@
 import { connectDB } from "@/utils/db";
 import Product from "@/utils/models/Product";
 
-export async function getProducts() {
+export async function getProducts(filter: Record<string, unknown> = {}) {
   await connectDB();
-  const products = await Product.find({}).lean().exec();
+  const products = await Product.find(filter).lean().exec();
   // Serialize for RSC props (ObjectId / Date → plain JSON)
   return JSON.parse(JSON.stringify(products));
 }

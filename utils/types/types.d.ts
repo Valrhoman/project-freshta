@@ -13,6 +13,7 @@ type Product = {
   weight: number;
   tags: Array;
   imageUrl: string;
+  ownerId: string;
 };
 
 type ModalProps = {
