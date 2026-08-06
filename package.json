@@ -9,7 +9,8 @@
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "backfill:ownerId": "node --env-file=.env.local ./node_modules/tsx/dist/cli.mjs scripts/backfill-product-ownerId.ts"
   },
   "engines": {
     "node": ">=18.18.0"
@@ -45,6 +46,7 @@
     "postcss": "^8.5.3",
     "tailwindcss": "3.3.2",
     "ts-node": "^10.9.2",
+    "tsx": "^4.23.8",
     "typescript": "^5.8.3"
   }
 }

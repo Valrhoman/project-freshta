@@ -50,6 +50,7 @@ Optional: open the repo in a [dev container](.devcontainer/) (`npm install` runs
 | `npm test` | Jest unit / API tests |
 | `npm run test:watch` | Jest in watch mode |
 | `npm run test:e2e` | Playwright end-to-end smokes |
+| `npm run backfill:ownerId` | Dry-run orphan product ownerId backfill (see Known limits) |
 
 ## Routes and APIs
 
@@ -95,7 +96,7 @@ Full register/login e2e needs a dedicated test user and stable Atlas — deferre
 
 - No product update/delete APIs yet
 - Shop, cart, How It Works, Blog, Contact, and `/myAccount` nav targets are mostly stubs
-- Products created before ownership was added have no `ownerId` and will not appear under “Your listings”
+- Products created before ownership was added have no `ownerId` and will not appear under “Your listings” until backfilled: `npm run backfill:ownerId` (dry-run), then `npm run backfill:ownerId -- --ownerId <userId> --apply`
 - Leftover scaffold: `GET /api/hello`
 
 ## Security
