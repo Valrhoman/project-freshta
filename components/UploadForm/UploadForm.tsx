@@ -1,11 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Image from "next/image";
+import { toast } from "sonner";
 import resizeImage from "../../utils/helpers/resizeImage";
-import Success from "./Success";
 import { saveImage } from "@/utils/imageStorage";
-import { useRouter, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import { createProduct } from "@/app/actions/products";
 
 const uploadFormInit = {
   name: "",
@@ -17,9 +18,7 @@ const uploadFormInit = {
 
 export default function UploadForm() {
   const [formData, setFormData] = useState<UploadFormState>(uploadFormInit);
-  const [showSuccess, setShowSucess] = useState<boolean>(false);
-
-  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const { data: session } = useSession({
     required: true,
@@ -33,7 +32,6 @@ export default function UploadForm() {
 
     if (type === "file" && files?.length) {
       const resizedImage = await resizeImage(files[0] as File);
-      console.log(resizedImage);
       setFormData((prevData) => ({
         ...prevData,
         [name]: resizedImage,
@@ -49,41 +47,38 @@ export default function UploadForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
 
-    // Save image to firebase
-    const imageUrl = await saveImage(formData);
-
-    // Handle form submission
-    const formDataToDB = new FormData();
-
-    formDataToDB.append("name", formData.name);
-    formDataToDB.append("tags", formData.tags);
-    formDataToDB.append("imageUrl", imageUrl);
-    if (formData.price && formData.weight) {
-      formDataToDB.append("price", formData.price.toString());
-      formDataToDB.append("weight", formData.weight.toString());
+    if (!formData.price || !formData.weight || !formData.image) {
+      toast.error("Please fill in all required fields");
+      return;
     }
 
-    // Send data to api/products POST handler
     try {
-      const res = await fetch("/api/products", {
-        method: "POST",
-        body: formDataToDB,
-      });
+      const imageUrl = await saveImage(formData);
 
-      if (res.ok) {
-        // Form submitted successfully
-        setShowSucess(true);
-      }
+      startTransition(async () => {
+        const result = await createProduct({
+          name: formData.name,
+          tags: formData.tags,
+          imageUrl,
+          price: Number(formData.price),
+          weight: Number(formData.weight),
+        });
+
+        if (!result.ok) {
+          toast.error(result.error || "Failed to add product");
+          return;
+        }
+
+        toast.success("Product posted");
+        setFormData(uploadFormInit);
+        form.reset();
+      });
     } catch (err) {
       console.error("Error:", err);
+      toast.error(err instanceof Error ? err.message : "Failed to add product");
     }
-
-    // Reset the form element and formData state
-    setFormData(uploadFormInit);
-    const form = e.target as HTMLFormElement;
-    form.reset();
-    router.refresh();
   };
 
   return (
@@ -102,6 +97,7 @@ export default function UploadForm() {
             className="w-full px-2 py-1 border rounded"
             placeholder="Ex. Oranges"
             required
+            disabled={isPending}
           />
         </div>
         <div className="mb-4">
@@ -117,6 +113,7 @@ export default function UploadForm() {
             className="w-full px-2 py-1 border rounded"
             placeholder="Ex. 1000"
             required
+            disabled={isPending}
           />
         </div>
         <div className="mb-4">
@@ -132,6 +129,7 @@ export default function UploadForm() {
             className="w-full px-2 py-1 border rounded"
             placeholder="Ex. 200"
             required
+            disabled={isPending}
           />
         </div>
         <div className="mb-4">
@@ -146,6 +144,7 @@ export default function UploadForm() {
             onChange={handleInputChange}
             className="w-full px-2 py-1 border rounded"
             placeholder="Ex. featured, bestseller (separated by commas)"
+            disabled={isPending}
           />
         </div>
         <div className="mb-4">
@@ -160,6 +159,7 @@ export default function UploadForm() {
             className="w-full"
             accept="image/*"
             required
+            disabled={isPending}
           />
         </div>
         {formData.image && (
@@ -173,9 +173,10 @@ export default function UploadForm() {
         )}
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
+          disabled={isPending}
         >
-          Add Product
+          {isPending ? "Adding…" : "Add Product"}
         </button>
       </form>
       {session && (
@@ -183,13 +184,12 @@ export default function UploadForm() {
           <p>{session && session.user?.email}</p>
           <button
             className="text-2xl p-4"
-            onClick={() => signOut({ callbackUrl: '/account/login' })}
+            onClick={() => signOut({ callbackUrl: "/account/login" })}
           >
             Sign out
           </button>
         </>
       )}
-      <Success open={showSuccess} onClose={() => setShowSucess(false)} />
     </>
   );
 }

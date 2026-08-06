@@ -50,6 +50,7 @@ Optional: open the repo in a [dev container](.devcontainer/) (`npm install` runs
 | `npm test` | Jest unit / API tests |
 | `npm run test:watch` | Jest in watch mode |
 | `npm run test:e2e` | Playwright end-to-end smokes |
+| `npm run backfill:ownerId` | Dry-run orphan product ownerId backfill (see Known limits) |
 
 ## Routes and APIs
 
@@ -69,13 +70,18 @@ Optional: open the repo in a [dev container](.devcontainer/) (`npm install` runs
 | `POST /api/auth/signup` | Register user |
 | `/api/auth/[...nextauth]` | Auth.js handlers |
 | `GET` / `POST /api/products` | List / create products (`POST` requires a session; sets `ownerId`) |
+| `PATCH` / `DELETE /api/products/[id]` | Update / delete a product (session required; owner only). Firebase images are not removed on delete. |
+
+Product create / update / delete from the upload UI go through Server Actions in `app/actions/products.ts` (same ownership rules). Success/error feedback uses sonner toasts.
 
 ## Architecture (brief)
 
 - `app/` — App Router pages and route handlers
+- `app/actions/` — Server Actions (product mutations)
 - `auth.ts` — Auth.js config (`handlers`, `auth`, `signIn`, `signOut`)
 - `components/` — UI
 - `utils/` — DB, models, helpers, types
+- `utils/products/` — shared product mutation helpers used by actions and API routes
 
 More agent/env detail: [`AGENTS.md`](AGENTS.md).
 
@@ -87,15 +93,15 @@ More agent/env detail: [`AGENTS.md`](AGENTS.md).
 Examples:
 
 - Unit: `utils/helpers/toTitleCase.test.ts`
-- API: `app/api/products/route.test.ts` (mocked mongoose)
+- API: `app/api/products/route.test.ts`, `app/api/products/[id]/route.test.ts` (mocked mongoose)
 - E2E: `e2e/home.spec.ts`, `e2e/auth-gate.spec.ts` (logged-out `/upload` → login)
 
 Full register/login e2e needs a dedicated test user and stable Atlas — deferred for now.
 ## Known limits
 
-- No product update/delete APIs yet
 - Shop, cart, How It Works, Blog, Contact, and `/myAccount` nav targets are mostly stubs
-- Products created before ownership was added have no `ownerId` and will not appear under “Your listings”
+- Product image replace on edit is not wired; deleting a product does not remove its Firebase Storage object
+- Products created before ownership was added have no `ownerId` and will not appear under “Your listings” until backfilled: `npm run backfill:ownerId` (dry-run), then `npm run backfill:ownerId -- --ownerId <userId> --apply`
 - Leftover scaffold: `GET /api/hello`
 
 ## Security
