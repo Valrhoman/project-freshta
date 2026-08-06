@@ -70,14 +70,12 @@ export default function CreateAccountForm() {
 
       const resData = await res.json();
       if (resData?.success) {
-        // Save data in session using next-auth
         setIsLoading(false);
 
-        // Reset the form element and formData state
         setFormData(signupFormInit);
         const form = e.target as HTMLFormElement;
         form.reset();
-        router.replace('/account/login');
+        router.replace('/account/login?registered=1');
       } else {
         setIsLoading(false);
         throw new Error(resData.error);

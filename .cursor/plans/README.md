@@ -4,6 +4,7 @@ Finished and in-progress task plans. See [`.cursor/rules/plan-docs.mdc`](../rule
 
 | File | Title |
 |------|--------|
+| [2026-08-06-server-actions-loading.plan.md](2026-08-06-server-actions-loading.plan.md) | Server Actions, loading UI, and mutation toasts |
 | [2026-08-06-migrate-plans-directory.plan.md](2026-08-06-migrate-plans-directory.plan.md) | Migrate plan docs to `.cursor/plans` |
 | [2026-08-06-seller-product-mutate.plan.md](2026-08-06-seller-product-mutate.plan.md) | Seller trust follow-up: update and delete |
 | [2026-08-06-ownerid-backfill.plan.md](2026-08-06-ownerid-backfill.plan.md) | Legacy ownerId backfill |

@@ -72,12 +72,16 @@ Optional: open the repo in a [dev container](.devcontainer/) (`npm install` runs
 | `GET` / `POST /api/products` | List / create products (`POST` requires a session; sets `ownerId`) |
 | `PATCH` / `DELETE /api/products/[id]` | Update / delete a product (session required; owner only). Firebase images are not removed on delete. |
 
+Product create / update / delete from the upload UI go through Server Actions in `app/actions/products.ts` (same ownership rules). Success/error feedback uses sonner toasts.
+
 ## Architecture (brief)
 
 - `app/` — App Router pages and route handlers
+- `app/actions/` — Server Actions (product mutations)
 - `auth.ts` — Auth.js config (`handlers`, `auth`, `signIn`, `signOut`)
 - `components/` — UI
 - `utils/` — DB, models, helpers, types
+- `utils/products/` — shared product mutation helpers used by actions and API routes
 
 More agent/env detail: [`AGENTS.md`](AGENTS.md).
 

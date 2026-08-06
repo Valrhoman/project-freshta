@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Option from './Option';
 import { CgSpinner } from 'react-icons/cg';
 import { loginUser } from '@/utils/helpers/loginUser';
@@ -23,9 +23,19 @@ export default function LoginForm() {
   const [formData, setFormData] = useState(loginFormInit);
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string>('');
+  const [showRegisteredBanner, setShowRegisteredBanner] = useState(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get('registered') !== '1') return;
+    setShowRegisteredBanner(true);
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('registered');
+    const qs = params.toString();
+    router.replace(qs ? `/account/login?${qs}` : '/account/login');
+  }, [searchParams, router]);
 
   function handleFocus(e: React.FocusEvent<HTMLInputElement>) {
     setFocusedInput(e.target.name);
@@ -75,6 +85,14 @@ export default function LoginForm() {
   return (
     <div className='mx-8 mt-36 mb-48 font-poppins sm:max-w-3xl sm:mx-auto'>
       <h2 className='text-4xl font-semibold text-greeny-600 my-12'>Login</h2>
+      {showRegisteredBanner && (
+        <p
+          className='mb-8 rounded-lg border border-greeny-300 bg-greeny-50 px-4 py-3 text-center text-lg text-greeny-800'
+          role='status'
+        >
+          Account created. Please log in.
+        </p>
+      )}
       <div>
         <form className='flex flex-col gap-8' onSubmit={handleLogin}>
           <InputField

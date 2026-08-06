@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { updateProduct, deleteProduct } from "@/app/actions/products";
 
 export type OwnedProduct = {
   _id: string;
@@ -30,78 +31,59 @@ function toEditState(product: OwnedProduct): EditState {
 }
 
 export default function OwnedProductCard({ product }: { product: OwnedProduct }) {
-  const router = useRouter();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<EditState>(() => toEditState(product));
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (!window.confirm(`Delete “${product.name}”?`)) return;
-    setBusy(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/products/${product._id}`, { method: "DELETE" });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body.error || "Delete failed");
+
+    startTransition(async () => {
+      const result = await deleteProduct(product._id);
+      if (!result.ok) {
+        toast.error(result.error || "Delete failed");
+        return;
       }
-      router.refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Delete failed");
-    } finally {
-      setBusy(false);
-    }
+      toast.success("Product deleted");
+    });
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
     const name = draft.name.trim();
     const weight = Number(draft.weight);
     const price = Number(draft.price);
     if (!name) {
-      setError("Name is required");
+      toast.error("Name is required");
       return;
     }
     if (!Number.isFinite(weight) || !Number.isFinite(price)) {
-      setError("Weight and price must be valid numbers");
+      toast.error("Weight and price must be valid numbers");
       return;
     }
 
-    setBusy(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/products/${product._id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          weight,
-          price,
-          tags: draft.tags,
-        }),
+    startTransition(async () => {
+      const result = await updateProduct(product._id, {
+        name,
+        weight,
+        price,
+        tags: draft.tags,
       });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body.error || "Update failed");
+      if (!result.ok) {
+        toast.error(result.error || "Update failed");
+        return;
       }
       setEditing(false);
-      router.refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Update failed");
-    } finally {
-      setBusy(false);
-    }
+      toast.success("Product updated");
+    });
   };
 
   const startEdit = () => {
     setDraft(toEditState(product));
-    setError(null);
     setEditing(true);
   };
 
   const cancelEdit = () => {
     setDraft(toEditState(product));
-    setError(null);
     setEditing(false);
   };
 
@@ -121,7 +103,7 @@ export default function OwnedProductCard({ product }: { product: OwnedProduct })
               className="mt-1 w-full border px-2 py-1"
               value={draft.name}
               onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
-              disabled={busy}
+              disabled={isPending}
             />
           </label>
           <label className="block text-sm">
@@ -130,7 +112,7 @@ export default function OwnedProductCard({ product }: { product: OwnedProduct })
               className="mt-1 w-full border px-2 py-1"
               value={draft.weight}
               onChange={(e) => setDraft((d) => ({ ...d, weight: e.target.value }))}
-              disabled={busy}
+              disabled={isPending}
             />
           </label>
           <label className="block text-sm">
@@ -139,7 +121,7 @@ export default function OwnedProductCard({ product }: { product: OwnedProduct })
               className="mt-1 w-full border px-2 py-1"
               value={draft.price}
               onChange={(e) => setDraft((d) => ({ ...d, price: e.target.value }))}
-              disabled={busy}
+              disabled={isPending}
             />
           </label>
           <label className="block text-sm">
@@ -148,7 +130,7 @@ export default function OwnedProductCard({ product }: { product: OwnedProduct })
               className="mt-1 w-full border px-2 py-1"
               value={draft.tags}
               onChange={(e) => setDraft((d) => ({ ...d, tags: e.target.value }))}
-              disabled={busy}
+              disabled={isPending}
               placeholder="featured, bestseller"
             />
           </label>
@@ -157,15 +139,15 @@ export default function OwnedProductCard({ product }: { product: OwnedProduct })
               type="button"
               className="bg-blue-500 px-3 py-1 text-white disabled:opacity-50"
               onClick={handleSave}
-              disabled={busy}
+              disabled={isPending}
             >
-              Save
+              {isPending ? "Saving…" : "Save"}
             </button>
             <button
               type="button"
               className="border px-3 py-1 disabled:opacity-50"
               onClick={cancelEdit}
-              disabled={busy}
+              disabled={isPending}
             >
               Cancel
             </button>
@@ -188,7 +170,7 @@ export default function OwnedProductCard({ product }: { product: OwnedProduct })
               type="button"
               className="border px-3 py-1 disabled:opacity-50"
               onClick={startEdit}
-              disabled={busy}
+              disabled={isPending}
             >
               Edit
             </button>
@@ -196,14 +178,13 @@ export default function OwnedProductCard({ product }: { product: OwnedProduct })
               type="button"
               className="border border-red-600 px-3 py-1 text-red-700 disabled:opacity-50"
               onClick={handleDelete}
-              disabled={busy}
+              disabled={isPending}
             >
-              Delete
+              {isPending ? "Deleting…" : "Delete"}
             </button>
           </div>
         </>
       )}
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>
   );
 }

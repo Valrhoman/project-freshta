@@ -28,7 +28,8 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-icons": "^4.8.0",
-    "react-image-file-resizer": "^0.4.8"
+    "react-image-file-resizer": "^0.4.8",
+    "sonner": "^2.0.7"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",

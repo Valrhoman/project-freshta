@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { connectDB } from "@/utils/db";
 import Product from "@/utils/models/Product";
+import { createProductForOwner } from "@/utils/products/mutations";
 
 export async function POST(req: Request) {
   try {
@@ -10,24 +11,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await connectDB();
-
     const formData = await req.formData();
-
-    // Converted tags data to array
-    const tags = formData.get("tags") as string;
-    const tagsArr = tags.split(",").map((item) => item.trim());
-
-    const product = new Product({
-      name: formData.get("name"),
-      weight: Number(formData.get("weight")), // Convert to number
-      price: Number(formData.get("price")), // Convert to number
-      tags: tagsArr,
-      imageUrl: formData.get("imageUrl"),
-      ownerId: session.user._id,
+    const result = await createProductForOwner(session.user._id, {
+      name: String(formData.get("name") ?? ""),
+      weight: Number(formData.get("weight")),
+      price: Number(formData.get("price")),
+      tags: String(formData.get("tags") ?? ""),
+      imageUrl: String(formData.get("imageUrl") ?? ""),
     });
-    const result = await product.save();
-    return NextResponse.json({ result });
+
+    if (!result.ok) {
+      return NextResponse.json(
+        { error: result.error },
+        { status: result.status },
+      );
+    }
+    return NextResponse.json({ result: result.result });
   } catch (err) {
     console.error(err);
     const message = err instanceof Error ? err.message : "Unknown error";
