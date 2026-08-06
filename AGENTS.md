@@ -37,7 +37,7 @@ Do not invent `APP_URL` usage — it is not read by the app today.
 - Prefer App Router patterns (`next/navigation`, Route Handlers, Metadata API)
 - Use `auth()` from `@/auth` for server-side session checks (not `getServerSession`)
 - Keep changes focused; avoid drive-by refactors
-- After a Cursor plan is finished, keep Goal/Plan/Outcome under [`docs/plans/`](docs/plans/) per [`.cursor/rules/plan-docs.mdc`](.cursor/rules/plan-docs.mdc). Do not rely on `.cursor/plans/` surviving Dev Container rebuilds.
+- After a Cursor plan is finished, keep the plan under [`.cursor/plans/`](.cursor/plans/) per [`.cursor/rules/plan-docs.mdc`](.cursor/rules/plan-docs.mdc) (`YYYY-MM-DD-slug.plan.md`, frontmatter todos, Divergences).
 
 ## Testing
 

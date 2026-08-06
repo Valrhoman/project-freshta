@@ -1,5 +1,5 @@
 ---
-description: Write a plan doc before non-trivial multi-step tasks and record the outcome after
+description: Write a plan doc before non-trivial multi-step tasks and record divergences after
 ---
 
 # Plan documentation policy
@@ -9,41 +9,61 @@ files, changes project configuration (Dockerfile, devcontainer.json,
 next.config.js, CI, auth, build tooling), or involves more than a couple
 of steps — create a plan file at:
 
-`docs/plans/YYYY-MM-DD-short-slug.md`
+`.cursor/plans/YYYY-MM-DD-short-slug.plan.md`
 
 Use the current date and a short kebab-case description of the task
-(e.g. `2026-08-01-playwright-e2e-setup.md`). Skip this for trivial changes
-(typo fixes, small copy edits, single-line tweaks).
+(e.g. `2026-08-01-playwright-e2e-setup.plan.md`). Skip this for trivial
+changes (typo fixes, small copy edits, single-line tweaks).
+
+Cursor’s “Save to workspace” may create a hash-suffixed name like
+`name_hash.plan.md`. Rename promptly to the date-prefixed form (same day
+as plan creation).
 
 ## Plan file structure
 
 ```md
+---
+name: Short title
+overview: One–two sentence summary.
+todos:
+  - id: example
+    content: Concrete task
+    status: pending   # → completed | cancelled when done
+isProject: false
+---
+
 # <Task title>
 
 ## Goal
 What this task is trying to accomplish and why.
 
-## Plan
-The proposed approach, as a short numbered list or steps.
-Note any alternatives considered and why they were rejected, if relevant.
+## Approach
+The proposed approach. Note alternatives considered and why they were
+rejected, if relevant. Optional mermaid diagram.
 
-## Outcome
-(Fill in after execution)
-What actually happened. Call out anything that diverged from the plan —
-unexpected errors, workarounds, follow-up items. This section is often
-more useful later than the plan itself.
+## Implementation
+Numbered steps with file paths and concrete changes.
+
+## Out of scope
+What this pass explicitly skips.
+
+## Divergences
+(Fill during/after execution)
+None | or bullets for unplanned decisions, errors, workarounds, or
+follow-ups that were not in Approach / Implementation / todos.
 ```
 
 ## Rules
 
-- Write the `Goal` and `Plan` sections *before* making changes, not
-  retroactively.
-- After the task is done (or abandoned), append the `Outcome` section
-  to the same file — don't skip this even if the task succeeded exactly
-  as planned; a short "went as expected" is still useful signal.
+- Write Goal, Approach, Implementation, Out of scope, and todos *before*
+  making changes, not retroactively.
+- Track completion via frontmatter todo `status` (`completed` /
+  `cancelled` / `pending`). No separate Outcome section.
+- After the task is done (or abandoned), fill `## Divergences` — use
+  `None` if nothing diverged; do not skip the section.
 - Never delete or overwrite a previous plan file. Each task gets its own
   file, permanently kept for history.
 - After adding a new plan file, add or update a one-line entry in
-  `docs/plans/README.md` (create it if missing) linking to the file, so
-  past plans can be scanned without opening each one individually.
+  `.cursor/plans/README.md` (create it if missing) linking to the file,
+  so past plans can be scanned without opening each one individually.
 - Plan files are committed to git, not gitignored.
