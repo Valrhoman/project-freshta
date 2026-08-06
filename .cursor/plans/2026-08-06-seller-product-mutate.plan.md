@@ -4,16 +4,16 @@ overview: Add owner-scoped PATCH and DELETE for products, wire delete/edit actio
 todos:
   - id: api-route
     content: Implement PATCH/DELETE in app/api/products/[id]/route.ts with owner checks
-    status: pending
+    status: completed
   - id: ui-card
     content: Add OwnedProductCard with edit + delete on upload listings
-    status: pending
+    status: completed
   - id: tests
     content: Add Jest coverage for auth, ownership, success paths
-    status: pending
+    status: completed
   - id: readme
-    content: Update README routes and known limits
-    status: pending
+    content: Update README routes and known limits; mark plan todos completed and Divergences
+    status: completed
 isProject: false
 ---
 
@@ -76,6 +76,8 @@ Same mock pattern as `[app/api/products/route.test.ts](app/api/products/route.te
 
 Update README Known limits / routes table: remove “No product update/delete APIs yet”; document `PATCH`/`DELETE /api/products/[id]` (session + owner). Note Firebase images are not deleted on product delete.
 
+Plan tracking stays in this file under [`.cursor/plans/`](.cursor/plans/) (already indexed in [`.cursor/plans/README.md`](README.md)): flip frontmatter todo statuses as work lands; fill `## Divergences` when done (no separate `docs/plans/` Outcome).
+
 ## Out of scope
 
 - Committing the existing ownerId backfill work (separate commit)
@@ -86,4 +88,4 @@ Update README Known limits / routes table: remove “No product update/delete AP
 
 ## Divergences
 
-None
+- Follow-up hardening after review: PATCH rejects null/non-object bodies, non-finite weight/price, empty/non-string name and imageUrl; OwnedProductCard validates name + numeric weight/price before save.

@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
-import Image from "next/image";
 import { NavBar } from "@/components/Nav";
 import UploadForm from "@/components/UploadForm";
+import OwnedProductCard from "@/components/UploadForm/OwnedProductCard";
 import { auth } from "@/auth";
 import { getProducts } from "@/utils/helpers/getProducts";
 
@@ -44,30 +44,16 @@ export default async function Upload() {
           You have not posted any products yet.
         </p>
       ) : (
-        products.map((item) => {
-          return (
-            <div key={item._id} className="mx-4 mb-6">
-              <Image
-                src={item.imageUrl}
-                alt={item.name}
-                width={100}
-                height={100}
-              />
-              <h3>{item.name}</h3>
-              <p>{item.weight} grams</p>
-              <p>{item.price} Php</p>
-              <div>
-                {item.tags.map((tag: string, i: number) => {
-                  return (
-                    <p className="bg-green text-white" key={i}>
-                      {tag}
-                    </p>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })
+        products.map((item) => (
+          <OwnedProductCard
+            key={String(item._id)}
+            product={{
+              ...item,
+              _id: String(item._id),
+              tags: item.tags ?? [],
+            }}
+          />
+        ))
       )}
     </div>
   );

@@ -70,6 +70,7 @@ Optional: open the repo in a [dev container](.devcontainer/) (`npm install` runs
 | `POST /api/auth/signup` | Register user |
 | `/api/auth/[...nextauth]` | Auth.js handlers |
 | `GET` / `POST /api/products` | List / create products (`POST` requires a session; sets `ownerId`) |
+| `PATCH` / `DELETE /api/products/[id]` | Update / delete a product (session required; owner only). Firebase images are not removed on delete. |
 
 ## Architecture (brief)
 
@@ -88,14 +89,14 @@ More agent/env detail: [`AGENTS.md`](AGENTS.md).
 Examples:
 
 - Unit: `utils/helpers/toTitleCase.test.ts`
-- API: `app/api/products/route.test.ts` (mocked mongoose)
+- API: `app/api/products/route.test.ts`, `app/api/products/[id]/route.test.ts` (mocked mongoose)
 - E2E: `e2e/home.spec.ts`, `e2e/auth-gate.spec.ts` (logged-out `/upload` → login)
 
 Full register/login e2e needs a dedicated test user and stable Atlas — deferred for now.
 ## Known limits
 
-- No product update/delete APIs yet
 - Shop, cart, How It Works, Blog, Contact, and `/myAccount` nav targets are mostly stubs
+- Product image replace on edit is not wired; deleting a product does not remove its Firebase Storage object
 - Products created before ownership was added have no `ownerId` and will not appear under “Your listings” until backfilled: `npm run backfill:ownerId` (dry-run), then `npm run backfill:ownerId -- --ownerId <userId> --apply`
 - Leftover scaffold: `GET /api/hello`
 
